@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum BookmarkImageType {
+  PLACEHOLDER
+  UPLOAD
+}
+
+model Board {
+  id        String          @id @default(cuid())
+  name      String          @unique
+  order     Int             @default(0)
+  bookmarks Bookmark[]
+  groups    BookmarkGroup[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
+
+model Bookmark {
+  id         String            @id @default(cuid())
+  boardId    String
+  groupId    String?
+  title      String
+  url        String
+  imageType  BookmarkImageType
+  imageValue String
+  positionX  Int
+  positionY  Int
+  width      Int               @default(180)
+  height     Int               @default(96)
+  board      Board             @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  group      BookmarkGroup?    @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+
+  @@index([boardId])
+  @@index([groupId])
+}
+
+model BookmarkGroup {
+  id         String     @id @default(cuid())
+  boardId    String
+  name       String
+  positionX  Int
+  positionY  Int
+  width      Int        @default(420)
+  height     Int        @default(280)
+  color      String     @default("#eef6ff")
+  board      Board      @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  bookmarks  Bookmark[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@index([boardId])
+}
