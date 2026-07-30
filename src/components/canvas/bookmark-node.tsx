@@ -60,9 +60,6 @@ export function BookmarkNode({ data }: NodeProps<BookmarkNodeType>) {
         type="button"
         data-node-action="delete"
         className="nodrag rounded p-1 text-slate-400 opacity-0 transition hover:bg-red-50 hover:text-red-600 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-blue-500 group-hover:opacity-100"
-        onClickCapture={(event) => {
-          event.stopPropagation();
-        }}
         onPointerDown={(event) => {
           event.stopPropagation();
           pointerStart.current = null;

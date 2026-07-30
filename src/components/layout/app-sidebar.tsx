@@ -113,13 +113,6 @@ export function AppSidebar({
         </button>
       </nav>
 
-      {!collapsed && (
-        <div className="m-5 rounded-xl border border-blue-100 bg-blue-50 px-4 py-5 text-sm text-slate-700">
-          <BrandLogo className="mb-3 h-9 w-9" />
-          <p>Visual bookmarks.</p>
-          <p>Organized your way.</p>
-        </div>
-      )}
     </aside>
   );
 }
