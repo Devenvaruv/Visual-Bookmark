@@ -1,6 +1,6 @@
 "use client";
 
-import { BriefcaseBusiness, ChevronLeft, FileText, GraduationCap, Plus, Trash2, UserRound, Video } from "lucide-react";
+import { BriefcaseBusiness, FileText, GraduationCap, Plus, Trash2, UserRound, Video } from "lucide-react";
 import clsx from "clsx";
 import { BrandLogo } from "@/components/layout/brand-logo";
 import type { BoardSummary } from "@/types/canvas";
@@ -35,8 +35,16 @@ export function AppSidebar({
         collapsed ? "w-[84px]" : "w-[260px]"
       )}
     >
-      <div className="flex h-24 items-center justify-between px-6">
-        <div className="flex items-center gap-3">
+      <div className={clsx("flex h-24 items-center px-6", collapsed ? "justify-center" : "justify-start")}>
+        <button
+          type="button"
+          className={clsx(
+            "flex items-center gap-3 rounded-lg text-left focus:outline-none focus:ring-2 focus:ring-blue-500",
+            collapsed ? "justify-center" : "w-full"
+          )}
+          onClick={onCollapse}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
           <BrandLogo className="h-10 w-10 shrink-0" />
           {!collapsed && (
             <div>
@@ -44,14 +52,6 @@ export function AppSidebar({
               <p className="text-xs font-medium text-slate-500">Boards</p>
             </div>
           )}
-        </div>
-        <button
-          type="button"
-          className="rounded-md p-2 text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onClick={onCollapse}
-          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          <ChevronLeft className={clsx("h-5 w-5 transition-transform", collapsed && "rotate-180")} />
         </button>
       </div>
 

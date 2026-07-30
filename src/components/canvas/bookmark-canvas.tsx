@@ -41,10 +41,6 @@ export function BookmarkCanvas({ data, onChanged, onError }: Props) {
         window.open(bookmark.url, "_blank", "noopener,noreferrer");
       },
       onDelete: async (bookmark: BookmarkRecord) => {
-        if (!window.confirm(`Delete "${bookmark.title}"?`)) {
-          return;
-        }
-
         await requestJson(`/api/bookmarks/${bookmark.id}`, { method: "DELETE" }, onError);
         onChanged();
       },
