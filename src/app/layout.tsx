@@ -3,7 +3,10 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Visual Bookmark",
-  description: "A visual bookmark manager with boards, groups, and draggable bookmark cards."
+  description: "A visual bookmark manager with boards, groups, and draggable bookmark cards.",
+  icons: {
+    icon: "/visual-bookmark-logo.svg"
+  }
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -13,4 +16,3 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     </html>
   );
 }
-

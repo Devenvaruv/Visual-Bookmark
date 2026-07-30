@@ -1,7 +1,8 @@
 "use client";
 
-import { Bookmark, BriefcaseBusiness, ChevronLeft, FileText, GraduationCap, Plus, Trash2, UserRound, Video } from "lucide-react";
+import { BriefcaseBusiness, ChevronLeft, FileText, GraduationCap, Plus, Trash2, UserRound, Video } from "lucide-react";
 import clsx from "clsx";
+import { BrandLogo } from "@/components/layout/brand-logo";
 import type { BoardSummary } from "@/types/canvas";
 
 type Props = {
@@ -36,10 +37,13 @@ export function AppSidebar({
     >
       <div className="flex h-24 items-center justify-between px-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-md bg-blue-600 text-white">
-            <Bookmark className="h-5 w-5 fill-current" />
-          </div>
-          {!collapsed && <h1 className="text-xl font-semibold text-slate-950">Boards</h1>}
+          <BrandLogo className="h-10 w-10 shrink-0" />
+          {!collapsed && (
+            <div>
+              <h1 className="text-xl font-semibold leading-tight text-slate-950">Visual Bookmark</h1>
+              <p className="text-xs font-medium text-slate-500">Boards</p>
+            </div>
+          )}
         </div>
         <button
           type="button"
@@ -111,7 +115,7 @@ export function AppSidebar({
 
       {!collapsed && (
         <div className="m-5 rounded-xl border border-blue-100 bg-blue-50 px-4 py-5 text-sm text-slate-700">
-          <Bookmark className="mb-3 h-7 w-7 text-blue-600" />
+          <BrandLogo className="mb-3 h-9 w-9" />
           <p>Visual bookmarks.</p>
           <p>Organized your way.</p>
         </div>
@@ -119,4 +123,3 @@ export function AppSidebar({
     </aside>
   );
 }
-
