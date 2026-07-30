@@ -1,10 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { Plus } from "lucide-react";
 import { BookmarkPanel } from "@/components/bookmarks/bookmark-panel";
 import { BookmarkCanvas } from "@/components/canvas/bookmark-canvas";
+import { GroupPanel } from "@/components/groups/group-panel";
 import { AppSidebar } from "@/components/layout/app-sidebar";
-import { TopToolbar } from "@/components/layout/top-toolbar";
 import type { BoardSummary, CanvasPayload } from "@/types/canvas";
 
 const EMPTY_CANVAS: CanvasPayload = {
@@ -17,7 +18,8 @@ export function VisualBookmarkApp() {
   const [selectedBoardId, setSelectedBoardId] = useState<string | null>(null);
   const [canvasData, setCanvasData] = useState<CanvasPayload>(EMPTY_CANVAS);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [panelOpen, setPanelOpen] = useState(false);
+  const [bookmarkPanelOpen, setBookmarkPanelOpen] = useState(false);
+  const [groupPanelOpen, setGroupPanelOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [canvasLoading, setCanvasLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -134,15 +136,10 @@ export function VisualBookmarkApp() {
     }
   }
 
-  async function createGroup() {
+  async function createGroup(name: string) {
     if (!selectedBoardId) {
       showError("Select a board first.");
-      return;
-    }
-
-    const name = window.prompt("Group name")?.trim();
-    if (!name) {
-      return;
+      throw new Error("Select a board first.");
     }
 
     const offset = canvasData.groups.length * 40;
@@ -162,7 +159,9 @@ export function VisualBookmarkApp() {
       });
       await loadCanvas(selectedBoardId);
     } catch (error) {
-      showError(error instanceof Error ? error.message : "Failed to create group.");
+      const message = error instanceof Error ? error.message : "Failed to create group.";
+      showError(message);
+      throw new Error(message);
     }
   }
 
@@ -179,14 +178,40 @@ export function VisualBookmarkApp() {
         onDeleteBoard={(board) => void deleteBoard(board)}
       />
 
-      <section className="relative flex min-w-0 flex-1 flex-col">
-        <TopToolbar onNewBookmark={() => setPanelOpen(true)} onNewGroup={() => void createGroup()} />
-
-        <div className="relative min-h-0 flex-1">
+      <section className="relative min-w-0 flex-1">
+        <div className="relative h-full">
           {loading || canvasLoading ? (
             <div className="flex h-full items-center justify-center text-slate-500">Loading...</div>
           ) : selectedBoard ? (
-            <BookmarkCanvas data={canvasData} onChanged={() => void loadCanvas()} onError={showError} />
+            <>
+              <BookmarkCanvas data={canvasData} onChanged={() => void loadCanvas()} onError={showError} />
+              <div className="absolute bottom-5 right-20 z-20 flex items-center gap-2">
+                <button
+                  type="button"
+                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  onClick={() => {
+                    setGroupPanelOpen(false);
+                    setBookmarkPanelOpen(true);
+                  }}
+                  title="New Bookmark"
+                  aria-label="New Bookmark"
+                >
+                  <Plus className="h-5 w-5" />
+                </button>
+                <button
+                  type="button"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed border-slate-400 bg-white text-slate-700 shadow-sm transition hover:border-blue-500 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  onClick={() => {
+                    setBookmarkPanelOpen(false);
+                    setGroupPanelOpen(true);
+                  }}
+                  title="New Group"
+                  aria-label="New Group"
+                >
+                  <Plus className="h-5 w-5" />
+                </button>
+              </div>
+            </>
           ) : (
             <div className="flex h-full items-center justify-center">
               <button
@@ -200,11 +225,17 @@ export function VisualBookmarkApp() {
           )}
 
           <BookmarkPanel
-            open={panelOpen}
+            open={bookmarkPanelOpen}
             boardId={selectedBoardId}
-            onClose={() => setPanelOpen(false)}
+            onClose={() => setBookmarkPanelOpen(false)}
             onCreated={() => void loadCanvas(selectedBoardId)}
             onError={showError}
+          />
+
+          <GroupPanel
+            open={groupPanelOpen}
+            onClose={() => setGroupPanelOpen(false)}
+            onCreate={createGroup}
           />
 
           {message && (
@@ -233,4 +264,3 @@ function pickGroupColor(index: number) {
   const colors = ["#eef6ff", "#effaf5", "#f8f5ff", "#fff7ed", "#f8fafc"];
   return colors[index % colors.length];
 }
-

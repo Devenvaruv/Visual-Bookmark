@@ -37,7 +37,7 @@ export function BookmarkNode({ data }: NodeProps<BookmarkNodeType>) {
 
   return (
     <div
-      className="group flex h-24 w-44 cursor-pointer items-center gap-3 rounded-lg border border-slate-200 bg-white px-4 shadow-sm transition hover:border-blue-200 hover:shadow-md"
+      className="group flex h-24 w-44 cursor-pointer items-center gap-3 rounded-lg border border-slate-200 bg-white px-3 shadow-sm transition hover:border-blue-200 hover:shadow-md"
       onPointerDown={(event) => {
         if (isActionTarget(event.target)) {
           pointerStart.current = null;
@@ -49,13 +49,15 @@ export function BookmarkNode({ data }: NodeProps<BookmarkNodeType>) {
     >
       {data.imageType === "UPLOAD" ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={data.imageValue} alt={`${data.title} thumbnail`} className="h-14 w-14 rounded-lg object-cover" />
+        <img src={data.imageValue} alt={`${data.title} thumbnail`} className="h-12 w-12 rounded-lg object-cover" />
       ) : (
-        <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-lg ${placeholder.bg} ${placeholder.fg}`}>
-          <placeholder.Icon className="h-8 w-8" />
+        <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-lg ${placeholder.bg} ${placeholder.fg}`}>
+          <placeholder.Icon className="h-7 w-7" />
         </div>
       )}
-      <span className="min-w-0 flex-1 break-words text-sm font-semibold leading-tight text-slate-950">{data.title}</span>
+      <span className="min-w-0 flex-1 overflow-hidden break-all text-[11px] font-semibold leading-snug text-slate-950">
+        {data.title}
+      </span>
       <button
         type="button"
         data-node-action="delete"

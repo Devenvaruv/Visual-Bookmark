@@ -218,7 +218,7 @@ export function BookmarkCanvas({ data, onChanged, onError }: Props) {
         onNodeDragStop={handleNodeDragStop}
         snapToGrid
         snapGrid={[20, 20]}
-        fitView
+        defaultViewport={{ x: 0, y: 0, zoom: 1 }}
         minZoom={0.35}
         maxZoom={1.6}
         proOptions={{ hideAttribution: true }}

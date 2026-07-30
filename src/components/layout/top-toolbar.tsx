@@ -1,6 +1,6 @@
 "use client";
 
-import { Grid2X2, Plus, Search, Settings } from "lucide-react";
+import { Plus } from "lucide-react";
 
 type Props = {
   onNewBookmark: () => void;
@@ -9,7 +9,7 @@ type Props = {
 
 export function TopToolbar({ onNewBookmark, onNewGroup }: Props) {
   return (
-    <header className="flex h-24 items-center justify-between border-b border-slate-200 bg-white px-8">
+    <header className="flex h-24 items-center border-b border-slate-200 bg-white px-8">
       <div className="flex items-center gap-4">
         <button
           type="button"
@@ -28,21 +28,6 @@ export function TopToolbar({ onNewBookmark, onNewGroup }: Props) {
           New Group
         </button>
       </div>
-      <div className="flex items-center gap-5 text-slate-700">
-        <button type="button" className="rounded-lg p-2 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <Search className="h-6 w-6" />
-          <span className="sr-only">Search</span>
-        </button>
-        <button type="button" className="rounded-lg border border-slate-200 p-3 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <Grid2X2 className="h-5 w-5" />
-          <span className="sr-only">Canvas layout</span>
-        </button>
-        <button type="button" className="rounded-lg p-2 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <Settings className="h-6 w-6" />
-          <span className="sr-only">Settings</span>
-        </button>
-      </div>
     </header>
   );
 }
-

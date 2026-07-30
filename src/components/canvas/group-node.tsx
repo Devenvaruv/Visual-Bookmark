@@ -2,7 +2,7 @@
 
 import type { Node, NodeProps } from "@xyflow/react";
 import { NodeResizer } from "@xyflow/react";
-import { Grip, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { Grip, Pencil, Trash2 } from "lucide-react";
 import type { GroupRecord } from "@/types/canvas";
 
 export type GroupNodeData = GroupRecord & {
@@ -50,10 +50,8 @@ export function GroupNode({ id, data, selected }: NodeProps<GroupNodeType>) {
             <Trash2 className="h-4 w-4" />
             <span className="sr-only">Delete {data.name}</span>
           </button>
-          <MoreHorizontal className="h-5 w-5 text-slate-500" />
         </div>
       </div>
     </div>
   );
 }
-
