@@ -20,7 +20,6 @@ type ImageMode = "PLACEHOLDER" | "UPLOAD" | "FAVICON";
 
 export function BookmarkPanel({ open, boardId, onClose, onCreated, onError }: Props) {
   const [title, setTitle] = useState("");
-  const [generatedTitle, setGeneratedTitle] = useState("");
   const [url, setUrl] = useState("");
   const [imageMode, setImageMode] = useState<ImageMode>("PLACEHOLDER");
   const [placeholder, setPlaceholder] = useState("video");
@@ -30,6 +29,7 @@ export function BookmarkPanel({ open, boardId, onClose, onCreated, onError }: Pr
   const [submitting, setSubmitting] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
   const faviconRequestId = useRef(0);
+  const generatedTitle = useRef("");
 
   const fetchFavicon = useCallback(
     async (targetUrl: string, options: { notify?: boolean } = {}) => {
@@ -113,12 +113,13 @@ export function BookmarkPanel({ open, boardId, onClose, onCreated, onError }: Pr
 
   function handleUrlChange(nextUrl: string) {
     const nextGeneratedTitle = deriveBookmarkTitleFromUrl(nextUrl);
+    const previousGeneratedTitle = generatedTitle.current;
 
     setUrl(nextUrl);
     setFaviconUrl(null);
-    setGeneratedTitle(nextGeneratedTitle);
+    generatedTitle.current = nextGeneratedTitle;
     setTitle((currentTitle) => {
-      if (!currentTitle.trim() || currentTitle === generatedTitle) {
+      if (!currentTitle.trim() || currentTitle === previousGeneratedTitle) {
         return nextGeneratedTitle;
       }
 
@@ -161,7 +162,7 @@ export function BookmarkPanel({ open, boardId, onClose, onCreated, onError }: Pr
       }
 
       setTitle("");
-      setGeneratedTitle("");
+      generatedTitle.current = "";
       setUrl("");
       setPlaceholder("video");
       setUploadUrl(null);

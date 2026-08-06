@@ -1,9 +1,19 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { deriveBookmarkTitleFromUrl } from "@/lib/urls";
 import { bookmarkFormSchema } from "@/lib/validation";
 
 export async function POST(request: Request) {
-  const parsed = bookmarkFormSchema.safeParse(await request.json());
+  const body = (await request.json()) as Record<string, unknown>;
+  const parsed = bookmarkFormSchema.safeParse({
+    ...body,
+    title:
+      typeof body.title === "string" && body.title.trim()
+        ? body.title
+        : typeof body.url === "string"
+          ? deriveBookmarkTitleFromUrl(body.url)
+          : body.title
+  });
 
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Invalid bookmark." }, { status: 400 });
@@ -26,4 +36,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Failed to create bookmark." }, { status: 500 });
   }
 }
-
