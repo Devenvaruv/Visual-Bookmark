@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { FaviconPicker } from "@/components/bookmarks/favicon-picker";
 import { ImageUpload } from "@/components/bookmarks/image-upload";
 import { PlaceholderPicker } from "@/components/bookmarks/placeholder-picker";
+import { deriveBookmarkTitleFromUrl } from "@/lib/urls";
 
 type Props = {
   open: boolean;
@@ -19,6 +20,7 @@ type ImageMode = "PLACEHOLDER" | "UPLOAD" | "FAVICON";
 
 export function BookmarkPanel({ open, boardId, onClose, onCreated, onError }: Props) {
   const [title, setTitle] = useState("");
+  const [generatedTitle, setGeneratedTitle] = useState("");
   const [url, setUrl] = useState("");
   const [imageMode, setImageMode] = useState<ImageMode>("PLACEHOLDER");
   const [placeholder, setPlaceholder] = useState("video");
@@ -109,6 +111,21 @@ export function BookmarkPanel({ open, boardId, onClose, onCreated, onError }: Pr
     return null;
   }
 
+  function handleUrlChange(nextUrl: string) {
+    const nextGeneratedTitle = deriveBookmarkTitleFromUrl(nextUrl);
+
+    setUrl(nextUrl);
+    setFaviconUrl(null);
+    setGeneratedTitle(nextGeneratedTitle);
+    setTitle((currentTitle) => {
+      if (!currentTitle.trim() || currentTitle === generatedTitle) {
+        return nextGeneratedTitle;
+      }
+
+      return currentTitle;
+    });
+  }
+
   async function handleSubmit() {
     if (!boardId) {
       setLocalError("Select a board first.");
@@ -144,6 +161,7 @@ export function BookmarkPanel({ open, boardId, onClose, onCreated, onError }: Pr
       }
 
       setTitle("");
+      setGeneratedTitle("");
       setUrl("");
       setPlaceholder("video");
       setUploadUrl(null);
@@ -189,10 +207,7 @@ export function BookmarkPanel({ open, boardId, onClose, onCreated, onError }: Pr
           <span className="mb-2 block text-sm font-semibold text-slate-900">URL</span>
           <input
             value={url}
-            onChange={(event) => {
-              setUrl(event.target.value);
-              setFaviconUrl(null);
-            }}
+            onChange={(event) => handleUrlChange(event.target.value)}
             className="h-11 w-full rounded-lg border border-slate-300 px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             placeholder="https://example.com"
           />
