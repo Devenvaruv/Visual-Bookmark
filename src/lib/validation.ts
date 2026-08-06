@@ -11,27 +11,46 @@ export const updateBoardSchema = z.object({
   name: boardNameSchema
 });
 
-export const bookmarkFormSchema = z.object({
-  boardId: z.string().min(1),
-  title: z.string().trim().min(1, "Title is required.").max(80),
-  url: z
-    .string()
-    .trim()
-    .min(1, "URL is required.")
-    .transform((value, ctx) => {
-      try {
-        return normalizeUrl(value);
-      } catch (error) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: error instanceof Error ? error.message : "Invalid URL."
-        });
-        return z.NEVER;
+export const bookmarkFormSchema = z
+  .object({
+    boardId: z.string().min(1),
+    title: z.string().trim().min(1, "Title is required.").max(80),
+    url: z
+      .string()
+      .trim()
+      .min(1, "URL is required.")
+      .transform((value, ctx) => {
+        try {
+          return normalizeUrl(value);
+        } catch (error) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: error instanceof Error ? error.message : "Invalid URL."
+          });
+          return z.NEVER;
+        }
+      }),
+    imageType: z.enum(["PLACEHOLDER", "UPLOAD", "FAVICON"]),
+    imageValue: z.string().trim().min(1, "Choose an image.")
+  })
+  .superRefine((value, ctx) => {
+    if (value.imageType !== "FAVICON") {
+      return;
+    }
+
+    try {
+      const parsed = new URL(value.imageValue);
+      if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+        throw new Error();
       }
-    }),
-  imageType: z.enum(["PLACEHOLDER", "UPLOAD"]),
-  imageValue: z.string().trim().min(1, "Choose an image.")
-});
+    } catch {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["imageValue"],
+        message: "Favicon must be an http or https URL."
+      });
+    }
+  });
 
 export const bookmarkPositionSchema = z.object({
   groupId: z.string().nullable(),
@@ -58,4 +77,3 @@ export const updateGroupSchema = z.object({
   width: z.number().int().min(260).optional(),
   height: z.number().int().min(180).optional()
 });
-

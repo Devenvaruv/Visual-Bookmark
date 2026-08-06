@@ -28,5 +28,28 @@ describe("bookmark creation validation", () => {
 
     expect(parsed.success).toBe(false);
   });
-});
 
+  it("accepts a bookmark that uses a favicon image", () => {
+    const parsed = bookmarkFormSchema.safeParse({
+      boardId: "board-1",
+      title: "Example",
+      url: "example.com",
+      imageType: "FAVICON",
+      imageValue: "https://example.com/favicon.ico"
+    });
+
+    expect(parsed.success).toBe(true);
+  });
+
+  it("rejects unsafe favicon image URLs", () => {
+    const parsed = bookmarkFormSchema.safeParse({
+      boardId: "board-1",
+      title: "Example",
+      url: "example.com",
+      imageType: "FAVICON",
+      imageValue: "javascript:alert(1)"
+    });
+
+    expect(parsed.success).toBe(false);
+  });
+});

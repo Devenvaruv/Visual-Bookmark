@@ -1,0 +1,1 @@
+ALTER TYPE "BookmarkImageType" ADD VALUE 'FAVICON';

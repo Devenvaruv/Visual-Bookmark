@@ -1,4 +1,4 @@
-export type ImageType = "PLACEHOLDER" | "UPLOAD";
+export type ImageType = "PLACEHOLDER" | "UPLOAD" | "FAVICON";
 
 export type BoardSummary = {
   id: string;
@@ -45,4 +45,3 @@ export type Size = {
   width: number;
   height: number;
 };
-

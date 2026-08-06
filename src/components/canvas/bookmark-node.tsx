@@ -50,6 +50,9 @@ export function BookmarkNode({ data }: NodeProps<BookmarkNodeType>) {
       {data.imageType === "UPLOAD" ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={data.imageValue} alt={`${data.title} thumbnail`} className="h-12 w-12 rounded-lg object-cover" />
+      ) : data.imageType === "FAVICON" ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={data.imageValue} alt={`${data.title} favicon`} className="h-12 w-12 rounded-lg object-contain" />
       ) : (
         <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-lg ${placeholder.bg} ${placeholder.fg}`}>
           <placeholder.Icon className="h-7 w-7" />

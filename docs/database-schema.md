@@ -32,6 +32,8 @@ Stores a visual card:
 
 `groupId` is nullable so a bookmark can live directly on the canvas.
 
+`imageType` can be `PLACEHOLDER`, `UPLOAD`, or `FAVICON`. `imageValue` stores the placeholder id, uploaded image path, or resolved favicon URL.
+
 ## BookmarkGroup
 
 Stores a visual container:
@@ -48,4 +50,3 @@ Stores a visual container:
 - `updatedAt`
 
 Deleting a group moves its bookmarks back to the root canvas instead of deleting them.
-
